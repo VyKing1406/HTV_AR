@@ -7,11 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ObjectContentDto {
+public class ObjectCommentDto {
+    private long id;
+    private Long objectTransformId;
     private String content;
+    private String createdDay;
+    private String userId;
 }

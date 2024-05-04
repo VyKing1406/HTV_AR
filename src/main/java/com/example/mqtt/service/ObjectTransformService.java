@@ -1,19 +1,25 @@
 package com.example.mqtt.service;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.mqtt.dto.ObjectContentDto;
+import com.example.mqtt.dto.ObjectCommentDto;
 import com.example.mqtt.dto.ObjectTransfromDto;
-import com.example.mqtt.entity.ObjectContentEntity;
+import com.example.mqtt.entity.ObjectCommentEntity;
 import com.example.mqtt.entity.ObjectTransformEntity;
+import com.example.mqtt.entity.SensorDeviceEntity;
 import com.example.mqtt.entity.StationEntity;
+import com.example.mqtt.exception.ResourceNotFoundException;
+import com.example.mqtt.repository.ObjectCommentRepository;
 import com.example.mqtt.repository.ObjectTransformRepository;
+import com.example.mqtt.repository.SensorDeviceRepository;
 import com.example.mqtt.repository.StationRepository;
 
 @Service
@@ -22,27 +28,34 @@ public class ObjectTransformService {
     private ModelMapper modelMapper;
     private ObjectTransformRepository objectTransformRepository;
     private StationRepository stationRepository;
+    private ObjectCommentRepository objectCommentRepository;
+    private SensorDeviceRepository sensorDeviceRepository;
 
     @Autowired
     public ObjectTransformService(
             ModelMapper modelMapper, ObjectTransformRepository objectTransformRepository,
-            StationRepository stationRepository) {
+            StationRepository stationRepository, ObjectCommentRepository objectCommentRepository, SensorDeviceRepository sensorDeviceRepository) {
         this.modelMapper = modelMapper;
         this.objectTransformRepository = objectTransformRepository;
         this.stationRepository = stationRepository;
+        this.objectCommentRepository = objectCommentRepository;
+        this.sensorDeviceRepository = sensorDeviceRepository;
     }
 
-    public void saveObjectTransform(ObjectTransfromDto objectTransfromDto) {
+    public void createObjectTransform(ObjectTransfromDto objectTransfromDto) {
         ObjectTransformEntity objectTransformEntity = modelMapper.map(objectTransfromDto, ObjectTransformEntity.class);
-        Optional<StationEntity> station = stationRepository.findById(objectTransfromDto.getStationId());
+        // long stationId = objectTransfromDto.getStationId();
+        Long stationId = 1L;
+        Optional<StationEntity> station = stationRepository.findById(stationId);
         if (station.get() != null) {
+            Optional<SensorDeviceEntity> sensorDevice = sensorDeviceRepository.findById(objectTransformEntity.getSensorDevice().getId());
+            objectTransformEntity.setSensorDevice(sensorDevice.get());
+            objectTransformEntity.setIndex(Long.valueOf(station.get().getObjectTransforms().size()));
             objectTransformEntity.setStation(station.get());
-            for (ObjectContentEntity objectContentEntity : objectTransformEntity.getContents()) {
-                objectContentEntity.setObjectTransform(objectTransformEntity);
-            }
             objectTransformRepository.save(objectTransformEntity);
         }
     }
+
 
     public List<ObjectTransfromDto> getObjectTransform(Long StationId) {
         Optional<StationEntity> station = stationRepository.findById(StationId);
@@ -53,4 +66,41 @@ public class ObjectTransformService {
         }
         return null;
     }
+
+    public void createObjectComment(ObjectCommentDto objectCommentDto) throws ParseException {
+        Optional<ObjectTransformEntity> objectTransformEntity = objectTransformRepository
+                .findById(objectCommentDto.getObjectTransformId());
+        if (objectTransformEntity != null) {
+            String createdDay = objectCommentDto.getCreatedDay();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.parse(createdDay, formatter);
+            ObjectCommentEntity objectCommentEntity = new ObjectCommentEntity();
+            objectCommentEntity.setContent(objectCommentDto.getContent());
+            objectCommentEntity.setCreatedDay(dateTime);
+            objectCommentEntity.setObjectTransform(objectTransformEntity.get());
+            objectCommentEntity.setUserId("1");
+            objectCommentRepository.save(objectCommentEntity);
+        }
+
+    }
+
+    public void updateObjectInstruction(Long objectId, ObjectTransfromDto objectCommentDto) throws ParseException {
+        ObjectTransformEntity objectTransformEntity = objectTransformRepository
+                .findById(objectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Object", "Id", "not foudn't exist"));
+        objectTransformEntity.setMaintenanceInstruction(objectCommentDto.getMaintenanceInstruction());
+        objectTransformRepository.save(objectTransformEntity);
+    }
+
+    public void updateObject(ObjectTransfromDto objectCommentDto) throws ParseException {
+
+        boolean exists = objectTransformRepository
+                .existsById(objectCommentDto.getId());
+        if (!exists) {
+            throw new ResourceNotFoundException("Object", "Id", "not foudn't exist");
+        }
+        ObjectTransformEntity objectTransformEntity = modelMapper.map(objectCommentDto, ObjectTransformEntity.class);
+        objectTransformRepository.save(objectTransformEntity);
+    }
+
 }

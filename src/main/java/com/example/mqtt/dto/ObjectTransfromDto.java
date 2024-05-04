@@ -17,7 +17,8 @@ import lombok.ToString;
 @ToString
 public class ObjectTransfromDto {
     @JsonProperty(access = JsonProperty.Access.READ_WRITE)
-    private Long id = null;
+    private Long id;
+    private Long index;
     private Long stationId;
     private float positionX;
     private float positionY;
@@ -29,5 +30,7 @@ public class ObjectTransfromDto {
     private float scaleX;
     private float scaleY;
     private float scaleZ;
-    private List<ObjectContentDto> contents;
+    private String maintenanceInstruction;
+    private List<ObjectCommentDto> comments;
+    private SensorDeviceDto sensorDevice;
 }

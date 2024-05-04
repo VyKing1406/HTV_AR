@@ -1,5 +1,8 @@
 package com.example.mqtt.entity;
 
+import java.time.LocalDateTime;
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,14 +17,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "object_content")
-public class ObjectContentEntity {
+@Table(name = "object_comment")
+public class ObjectCommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition="TEXT") 
     private String content;
+
+    @Column(name = "created_day")
+    private LocalDateTime createdDay;
+
+    @Column(name = "user_id")
+    private String userId;
 
     @ManyToOne
     @JoinColumn(name = "object_transform_id")

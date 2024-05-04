@@ -3,6 +3,7 @@ package com.example.mqtt.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -15,6 +16,7 @@ import com.example.mqtt.dto.SensorDTO;
 import com.example.mqtt.entity.SensorDeviceEntity;
 import com.example.mqtt.entity.StationEntity;
 import com.example.mqtt.exception.ResourceNotFoundException;
+import com.example.mqtt.repository.SensorDeviceRepository;
 import com.example.mqtt.repository.StationRepository;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,9 +31,8 @@ public class SensorService {
 
     private StationRepository stationRepository;
     public final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
     @Autowired
-    SensorService(StationRepository stationRepository) {
+    SensorService(StationRepository stationRepository, SensorDeviceRepository sensorDeviceRepository) {
         this.stationRepository = stationRepository;
     }
 

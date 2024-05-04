@@ -3,6 +3,9 @@ package com.example.mqtt.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +23,7 @@ public class SensorDeviceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "sensor_id", nullable = false)
     private String sensorid;
@@ -31,7 +34,11 @@ public class SensorDeviceEntity {
     @Column(name = "sensor_unit", nullable = false)
     private String sensorUnit;
 
+    @Column(name = "sensor_image_url", nullable = false)
+    private String sensorImageUrl;
+
     @ManyToOne
     @JoinColumn(name = "station_id")
     private StationEntity station;
+
 }

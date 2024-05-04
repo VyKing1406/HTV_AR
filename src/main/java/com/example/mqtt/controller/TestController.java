@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.mqtt.dto.SensorDTO;
-import com.example.mqtt.service.DeviceService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,18 +32,6 @@ import org.springframework.http.MediaType;
 @RequestMapping("/device")
 public class TestController {
 
-    private DeviceService deviceService;
-
-    @Autowired
-    TestController(DeviceService deviceService) {
-        this.deviceService = deviceService;
-    }
-
-    @GetMapping(value = "/barbecue/ean13/{barcode}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<BufferedImage> barbecueEAN13Barcode(@PathVariable("barcode") String barcode)
-            throws Exception {
-        return ResponseEntity.ok(deviceService.generateQRCodeImage(barcode));
-    }
 
     @GetMapping(value = "/AI/{station_id}")
     public CompletableFuture<Object> AI(@PathVariable("station_id") String station_id)

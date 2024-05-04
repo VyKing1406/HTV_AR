@@ -13,8 +13,9 @@ import lombok.ToString;
 @ToString
 public class SensorDeviceDto {
     private Long id;
-    private String sensor_id;
-    private String sensor_name;
-    private String sensor_unit;
-    private Long station_id;
+    private String sensorId;
+    private String sensorname;
+    private String sensorUnit;
+    private Long stationId;
+    private String sensorImageUrl;
 }

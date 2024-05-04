@@ -41,7 +41,7 @@ public class StationEntity {
     @Column(name = "gps_latitude", nullable = false)
     private Double gpsLatitude;
 
-    @OneToMany(mappedBy = "station")
+    @OneToMany(mappedBy = "station", fetch = FetchType.EAGER)
     private List<SensorDeviceEntity> sensors;
 
     @OneToMany(mappedBy = "station")

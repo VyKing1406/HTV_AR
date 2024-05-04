@@ -4,23 +4,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
-
-import com.example.mqtt.dto.ObjectContentDto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Data
@@ -30,7 +24,10 @@ import jakarta.persistence.Table;
 public class ObjectTransformEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+
+    @Column(name = "index", nullable = false)
+    private Long index;
 
     @Column(name = "position_x", nullable = false)
     private float positionX;
@@ -62,11 +59,19 @@ public class ObjectTransformEntity {
     @Column(name = "scale_z", nullable = false)
     private float scaleZ;
 
+    @Column(name = "maintenance_instruction", columnDefinition = "TEXT")
+    private String maintenanceInstruction;
+
+
     @OneToMany(mappedBy = "objectTransform", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ObjectContentEntity> contents;
+    private List<ObjectCommentEntity> comments;
 
     @ManyToOne
     @JoinColumn(name = "station_id")
     private StationEntity station;
+
+    @ManyToOne
+    @JoinColumn(name = "sensor_id")
+    private SensorDeviceEntity sensorDevice;
 
 }

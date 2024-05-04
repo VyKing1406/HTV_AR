@@ -18,7 +18,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.example.mqtt.dto.ErrorDetails;
 import com.example.mqtt.dto.SensorDTO;
 import com.example.mqtt.entity.RoomEntity;
 import com.example.mqtt.entity.SensorDeviceEntity;
@@ -35,12 +34,10 @@ public class WebSocketService extends TextWebSocketHandler {
     @Autowired
     private SensorService sensorService;
 
-    private ObjectMapper objectMapper;
     private StationRepository stationRepository;
 
     @Autowired
-    WebSocketService(ObjectMapper objectMapper, StationRepository stationRepository, SensorService sensorService) {
-        this.objectMapper = objectMapper;
+    WebSocketService(StationRepository stationRepository, SensorService sensorService) {
         this.stationRepository = stationRepository;
         this.sensorService = sensorService;
     }
@@ -55,8 +52,8 @@ public class WebSocketService extends TextWebSocketHandler {
                 return;
             }
             Map<String, String> queryHashMap = splitQueryStringToHashMap(queryString);
-            List<StationEntity> stationEntity = stationRepository.findByStationId(queryHashMap.get("stationId"));
-            if (stationEntity.size() == 0) {
+            Boolean stationExist = stationRepository.existsByStationId(queryHashMap.get("stationId"));
+            if (!stationExist) {
                 session.sendMessage(new TextMessage("Station " + queryHashMap.get("stationId") + " not found"));
                 session.close();
                 return;

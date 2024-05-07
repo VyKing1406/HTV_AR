@@ -30,6 +30,7 @@ public class ObjectTransfromDto {
     private float scaleX;
     private float scaleY;
     private float scaleZ;
+    private String videoUrl;
     private String maintenanceInstruction;
     private List<ObjectCommentDto> comments;
     private SensorDeviceDto sensorDevice;

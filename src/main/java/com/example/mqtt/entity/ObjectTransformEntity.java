@@ -59,6 +59,9 @@ public class ObjectTransformEntity {
     @Column(name = "scale_z", nullable = false)
     private float scaleZ;
 
+    @Column(name = "videoUrl")
+    private String videoUrl;
+
     @Column(name = "maintenance_instruction", columnDefinition = "TEXT")
     private String maintenanceInstruction;
 

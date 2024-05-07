@@ -10,5 +10,6 @@ import com.example.mqtt.entity.ObjectTransformEntity;
 
 public interface ObjectTransformRepository extends JpaRepository<ObjectTransformEntity, Long> {
     List<ObjectTransformEntity> findByStationId(Long stationId);
+    List<ObjectTransformEntity> findByStationIdOrderByIndex(Long stationId);
 }
 

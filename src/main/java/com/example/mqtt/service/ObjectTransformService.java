@@ -60,7 +60,7 @@ public class ObjectTransformService {
     public List<ObjectTransfromDto> getObjectTransform(Long StationId) {
         Optional<StationEntity> station = stationRepository.findById(StationId);
         if (station.isPresent()) {
-            List<ObjectTransformEntity> transformEntities = objectTransformRepository.findByStationId(StationId);
+            List<ObjectTransformEntity> transformEntities = objectTransformRepository.findByStationIdOrderByIndex(StationId);
             return modelMapper.map(transformEntities, new TypeToken<List<ObjectTransfromDto>>() {
             }.getType());
         }
@@ -84,13 +84,6 @@ public class ObjectTransformService {
 
     }
 
-    public void updateObjectInstruction(Long objectId, ObjectTransfromDto objectCommentDto) throws ParseException {
-        ObjectTransformEntity objectTransformEntity = objectTransformRepository
-                .findById(objectId)
-                .orElseThrow(() -> new ResourceNotFoundException("Object", "Id", "not foudn't exist"));
-        objectTransformEntity.setMaintenanceInstruction(objectCommentDto.getMaintenanceInstruction());
-        objectTransformRepository.save(objectTransformEntity);
-    }
 
     public void updateObject(ObjectTransfromDto objectCommentDto) throws ParseException {
 

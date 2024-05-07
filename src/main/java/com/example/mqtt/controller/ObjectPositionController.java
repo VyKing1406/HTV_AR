@@ -40,18 +40,6 @@ public class ObjectPositionController {
         }
     }
 
-    @PatchMapping(value = "/transform/{objectId}/instruction", consumes = "application/json")
-    public ResponseEntity<String> updateObjectInstruction(@PathVariable("objectId") Long objectId,
-            @RequestBody ObjectTransfromDto data) {
-        try {
-            objectTransformService.updateObjectInstruction(objectId, data);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Updated successfully");
-        } catch (Exception e) {
-            // Xử lý lỗi và trả về ResponseEntity lỗi với mã HTTP 400 Bad Request
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
-    }
-
     @PatchMapping(value = "/transform", consumes = "application/json")
     public ResponseEntity<String> updateTransform(
             @RequestBody ObjectTransfromDto data) {
@@ -67,6 +55,7 @@ public class ObjectPositionController {
     @GetMapping(value = "/transform/{stationId}")
     public ResponseEntity<List<ObjectTransfromDto>> getTransform(@PathVariable("stationId") Long stationId) {
         try {
+            System.out.println("request");
             List<ObjectTransfromDto> getObjectTransform = objectTransformService.getObjectTransform(stationId);
             return ResponseEntity.status(HttpStatus.OK).body(getObjectTransform);
         } catch (Exception e) {

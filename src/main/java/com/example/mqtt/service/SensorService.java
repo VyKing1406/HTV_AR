@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.mqtt.dto.SensorDTO;
+import com.example.mqtt.dto.SensorDto;
 import com.example.mqtt.entity.SensorDeviceEntity;
 import com.example.mqtt.entity.StationEntity;
 import com.example.mqtt.exception.ResourceNotFoundException;
@@ -36,7 +36,7 @@ public class SensorService {
         this.stationRepository = stationRepository;
     }
 
-    public void saveSensorData(String stationId, SensorDTO sensorDTO) throws InterruptedException, ExecutionException {
+    public void saveSensorData(String stationId, SensorDto sensorDTO) throws InterruptedException, ExecutionException {
         DatabaseReference ref = database
                 .getReference("data_sensor" + "/" + stationId + "/" + sensorDTO.getId());
         ref.push().setValueAsync(sensorDTO);
@@ -63,15 +63,15 @@ public class SensorService {
         return resultFuture;
     }
 
-    public CompletableFuture<SensorDTO> getSensorDataLastest(String stationId, String sensorId)
+    public CompletableFuture<SensorDto> getSensorDataLastest(String stationId, String sensorId)
             throws InterruptedException, ExecutionException {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("data_sensor" + "/" + stationId + "/" + sensorId);
-        CompletableFuture<SensorDTO> future = new CompletableFuture<>();
+        CompletableFuture<SensorDto> future = new CompletableFuture<>();
         ref.orderByChild("created_at").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                SensorDTO lastestData = dataSnapshot.getChildren().iterator().next().getValue(SensorDTO.class);
+                SensorDto lastestData = dataSnapshot.getChildren().iterator().next().getValue(SensorDto.class);
                 future.complete(lastestData);
             }
             @Override
@@ -83,7 +83,7 @@ public class SensorService {
         return future;
     }
 
-    public ResponseEntity<CompletableFuture<List<SensorDTO>>> getSensorDataByTime(String stationId, String sensorId,
+    public ResponseEntity<CompletableFuture<List<SensorDto>>> getSensorDataByTime(String stationId, String sensorId,
             int num, String startDateTime, String endDateTime) {
         List<StationEntity> stationEntities = stationRepository.findByStationId(stationId);
         if (stationEntities.isEmpty()) {
@@ -99,7 +99,7 @@ public class SensorService {
         if (!checkSensorExists) {
             throw new ResourceNotFoundException("Sensor", "Sensor id", sensorId);
         }
-        final CompletableFuture<List<SensorDTO>> future = new CompletableFuture<>();
+        final CompletableFuture<List<SensorDto>> future = new CompletableFuture<>();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("data_sensor/" + stationId + "/" + sensorId);
@@ -108,9 +108,9 @@ public class SensorService {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<SensorDTO> sensorList = new ArrayList<>();
+                List<SensorDto> sensorList = new ArrayList<>();
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    SensorDTO sensor = childSnapshot.getValue(SensorDTO.class);
+                    SensorDto sensor = childSnapshot.getValue(SensorDto.class);
                     sensor.setCreated_at(sensor.getCreated_at());
                     sensorList.add(sensor);
                 }

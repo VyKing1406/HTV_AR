@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mqtt.dto.SensorDTO;
+import com.example.mqtt.dto.SensorDto;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +46,7 @@ public class TestController {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Object> sensorList = new ArrayList<>();
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    SensorDTO sensor = childSnapshot.getValue(SensorDTO.class);
+                    SensorDto sensor = childSnapshot.getValue(SensorDto.class);
                     sensor.setCreated_at(sensor.getCreated_at());
                     sensorList.add(sensor);
                 }

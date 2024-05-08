@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.example.mqtt.dto.SensorDTO;
+import com.example.mqtt.dto.SensorDto;
 import com.example.mqtt.dto.StationDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -60,7 +60,7 @@ public class MqttService implements MqttCallback {
             LocalDateTime currentDateTime = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = currentDateTime.format(formatter);
-            for (SensorDTO sensorData : stationData.getSensors()) {
+            for (SensorDto sensorData : stationData.getSensors()) {
                 sensorData.setCreated_at(formattedDateTime);
                 CompletableFuture<Void> saveDataFuture = CompletableFuture.runAsync(() -> {
                     try {

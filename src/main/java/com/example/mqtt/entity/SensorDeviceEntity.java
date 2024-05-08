@@ -34,7 +34,7 @@ public class SensorDeviceEntity {
     @Column(name = "sensor_unit", nullable = false)
     private String sensorUnit;
 
-    @Column(name = "sensor_image_url", nullable = false)
+    @Column(name = "sensor_image_url", nullable = false, columnDefinition = "TEXT")
     private String sensorImageUrl;
 
     @ManyToOne

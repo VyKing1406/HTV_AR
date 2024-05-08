@@ -11,8 +11,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SensorDTO {
+public class SensorDto {
     private String value;
+    private String type;
     private String id;
     private String created_at;
 }

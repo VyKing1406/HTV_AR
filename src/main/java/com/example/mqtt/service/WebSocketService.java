@@ -18,7 +18,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.example.mqtt.dto.SensorDTO;
+import com.example.mqtt.dto.SensorDto;
 import com.example.mqtt.entity.RoomEntity;
 import com.example.mqtt.entity.SensorDeviceEntity;
 import com.example.mqtt.entity.StationEntity;
@@ -46,6 +46,7 @@ public class WebSocketService extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         try {
             String queryString = session.getUri().getRawQuery();
+            System.out.println("connect" + session.getUri());
             if (queryString == null || queryString.isEmpty()) {
                 session.sendMessage(new TextMessage("Lacks of query in URL"));
                 session.close();
@@ -153,9 +154,10 @@ public class WebSocketService extends TextWebSocketHandler {
         topics.stream().forEach(
                 topic -> {
                     try {
-                        CompletableFuture<SensorDTO> latestedData = sensorService
+                        CompletableFuture<SensorDto> latestedData = sensorService
                                 .getSensorDataLastest(queryHashMap.get("stationId"), topic);
-                        SensorDTO lastedDTO = latestedData.get();
+                        SensorDto lastedDTO = latestedData.get();
+                        lastedDTO.setType("PRESENT");
                         lastedDTO.setCreated_at(lastedDTO.getCreated_at());
                         ObjectMapper objectMapper = new ObjectMapper();
                         String json = objectMapper.writeValueAsString(lastedDTO);

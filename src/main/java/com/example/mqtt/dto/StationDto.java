@@ -17,5 +17,5 @@ public class StationDto {
     private Long id;
     private String station_id;
     private String station_name;
-    private List<SensorDTO> sensors;
+    private List<SensorDto> sensors;
 }

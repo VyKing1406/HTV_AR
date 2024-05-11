@@ -44,6 +44,7 @@ public class ObjectPositionController {
     public ResponseEntity<String> updateTransform(
             @RequestBody ObjectTransfromDto data) {
         try {
+            System.out.println(data.toString());
             objectTransformService.updateObject(data);
             return ResponseEntity.status(HttpStatus.CREATED).body("Updated successfully");
         } catch (Exception e) {

@@ -85,15 +85,26 @@ public class ObjectTransformService {
     }
 
 
-    public void updateObject(ObjectTransfromDto objectCommentDto) throws ParseException {
+    public void updateObject(ObjectTransfromDto objectTransfromDto) throws ParseException {
 
         boolean exists = objectTransformRepository
-                .existsById(objectCommentDto.getId());
+                .existsById(objectTransfromDto.getId());
         if (!exists) {
             throw new ResourceNotFoundException("Object", "Id", "not foudn't exist");
         }
-        ObjectTransformEntity objectTransformEntity = modelMapper.map(objectCommentDto, ObjectTransformEntity.class);
-        objectTransformRepository.save(objectTransformEntity);
+
+        ObjectTransformEntity objectTransformEntity = modelMapper.map(objectTransfromDto, ObjectTransformEntity.class);
+        SensorDeviceEntity sensorDeviceEntity = modelMapper.map(objectTransfromDto.getSensorDevice(), SensorDeviceEntity.class);
+        // long stationId = objectTransfromDto.getStationId();
+        Long stationId = 1L;
+        Optional<StationEntity> station = stationRepository.findById(stationId);
+        if (station.get() != null) {
+            // Optional<SensorDeviceEntity> sensorDevice = sensorDeviceRepository.findById(objectTransformEntity.getSensorDevice().getId());
+            objectTransformEntity.setSensorDevice(sensorDeviceEntity);
+            // objectTransformEntity.setIndex(Long.valueOf(station.get().getObjectTransforms().size()));
+            objectTransformEntity.setStation(station.get());
+            objectTransformRepository.save(objectTransformEntity);
+        }
     }
 
 }

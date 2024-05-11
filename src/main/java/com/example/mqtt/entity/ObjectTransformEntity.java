@@ -66,7 +66,7 @@ public class ObjectTransformEntity {
     private String maintenanceInstruction;
 
 
-    @OneToMany(mappedBy = "objectTransform", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "objectTransform", cascade = CascadeType.ALL)
     private List<ObjectCommentEntity> comments;
 
     @ManyToOne

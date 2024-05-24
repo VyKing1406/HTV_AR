@@ -26,7 +26,7 @@ public class SensorDeviceEntity {
     private Long id;
 
     @Column(name = "sensor_id", nullable = false)
-    private String sensorid;
+    private String sensorId;
 
     @Column(name = "sensor_name", nullable = false)
     private String sensorname;

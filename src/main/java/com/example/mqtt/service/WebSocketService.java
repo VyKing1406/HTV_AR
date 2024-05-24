@@ -126,7 +126,7 @@ public class WebSocketService extends TextWebSocketHandler {
         List<SensorDeviceEntity> sensorEntities = stationEntity.get(0).getSensors();
         StringBuilder result = new StringBuilder();
         for (SensorDeviceEntity sensorEntity : sensorEntities) {
-            result.append(sensorEntity.getSensorid()).append(",");
+            result.append(sensorEntity.getSensorId()).append(",");
         }
         if (result.length() > 0) {
             result.deleteCharAt(result.length() - 1);

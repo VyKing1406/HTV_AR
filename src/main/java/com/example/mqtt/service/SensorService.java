@@ -91,7 +91,7 @@ public class SensorService {
         }
         Boolean checkSensorExists = false;
         for (SensorDeviceEntity sensorEntity : stationEntities.get(0).getSensors()) {
-            if (sensorEntity.getSensorid().equals(sensorId)) {
+            if (sensorEntity.getSensorId().equals(sensorId)) {
                 checkSensorExists = true;
                 break;
             }

@@ -13,6 +13,7 @@ import lombok.ToString;
 @ToString
 public class SensorDto {
     private String value;
+    private String error_predict;
     private String type;
     private String id;
     private String created_at;
